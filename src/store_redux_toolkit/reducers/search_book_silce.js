@@ -5,9 +5,8 @@ export const book_slice = createSlice({
   name: 'books_reducers',
   initialState: {
     search_data: [],
-    all_data: [],
-    loading: null,
-    error: false
+    all_data: []
+
   },
   reducers: {
     searchData: (state, action) => {

@@ -22,7 +22,7 @@ export const getAll = (disptch) =>
   fetch(`${api}/books`, { headers })
     .then((res) => res.json())
     .then((data) => data.books).then((d) => {
-      console.log(d);
+      // console.log(d);
       disptch(allData(d))
     });
 

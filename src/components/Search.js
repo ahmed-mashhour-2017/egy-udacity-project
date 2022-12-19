@@ -1,14 +1,16 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { NavLink } from 'react-router-dom';
-import { search } from './../BooksAPI';
+import { getAll, search } from './../BooksAPI';
 import { useDispatch, useSelector } from "react-redux";
 
 import Book from './Book';
 
 
 export default function Search() {
-    const { search_data } = useSelector(state => state.books);
+    const { search_data, all_data } = useSelector(state => state.books);
     const disptch = useDispatch();
+    const [xxx, seXxx] = useState([]);
+
 
     return (
         <div className="search-books">
@@ -24,7 +26,28 @@ export default function Search() {
 
                         onChange={(e) => {
                             if (e.target.value)
-                                search(e.target.value.toString(), 5, disptch)
+                                search(e.target.value.toString(), 5, disptch).then(() => {
+                                    getAll(disptch)
+                                }).then(() => {
+                                    let newSearch = [];
+                                    if (!search_data.error) {
+                                        //newSearch = all_data.filter((it) => search_data.find(element => element.id === it.id));
+                                        newSearch = search_data.map((it) => {
+                                            let exist = all_data.find(element => element.id === it.id);
+                                            //   console.log(exist);
+                                            if (exist) {
+                                                return exist;
+                                            } else {
+                                                return it;
+                                            }
+                                        })
+
+
+                                    }
+
+                                    seXxx(newSearch)
+                                })
+
 
 
                         }}
@@ -35,7 +58,7 @@ export default function Search() {
             </div>
             <div className="search-books-results">
                 <ol className="books-grid">
-                    {search_data.length > 0 && search_data.map((item, index) => {
+                    {xxx.length > 0 && xxx.map((item, index) => {
                         // console.log(item);
                         return (
                             <Book key={index} item={item}></Book>
